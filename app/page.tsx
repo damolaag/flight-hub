@@ -147,58 +147,28 @@ export default function Home() {
   }, []);
 
   const runSearch = useCallback(async (input: SearchInput) => {
-  setLoading(true);
-  setError("");
-
-  try {
-    const params = new URLSearchParams({
-      from: input.from,
-      to: input.to,
-      departDate: input.departDate,
-      tripType: input.tripType,
-      sort: input.sort,
-    });
-
-    if (input.tripType === "roundtrip" && input.returnDate) {
-      params.set("returnDate", input.returnDate);
+    setLoading(true);
+    setError("");
+    try {
+      const params = new URLSearchParams({ from: input.from, to: input.to, departDate: input.departDate, tripType: input.tripType, sort: input.sort });
+      if (input.tripType === "roundtrip" && input.returnDate) params.set("returnDate", input.returnDate);
+      const response = await fetch(`/api/flights?${params}`);
+      const data = (await response.json()) as {
+        flights?: FlightOption[];
+        error?: string;
+      };
+      if (!response.ok) throw new Error(data.error ?? "We could not load flights.");
+      const results = data.flights ?? [];
+      setFlights(results);
+      return { count: results.length, lowestPrice: results[0]?.price ?? null };
+    } catch (reason) {
+      setFlights([]);
+      setError(reason instanceof Error ? reason.message : "We could not load flights.");
+      return { count: 0, error: reason instanceof Error ? reason.message : "Search failed" };
+    } finally {
+      setLoading(false);
     }
-
-    const response = await fetch(`/api/flights?${params.toString()}`);
-
-    const data = (await response.json()) as {
-      flights?: FlightOption[];
-      error?: string;
-    };
-
-    if (!response.ok) {
-      throw new Error(data.error ?? "We could not load flights.");
-    }
-
-    const results = data.flights ?? [];
-
-    setFlights(results);
-
-    return {
-      count: results.length,
-      lowestPrice: results[0]?.price ?? null,
-    };
-  } catch (reason) {
-    const message =
-      reason instanceof Error
-        ? reason.message
-        : "We could not load flights.";
-
-    setFlights([]);
-    setError(message);
-
-    return {
-      count: 0,
-      error: message,
-    };
-  } finally {
-    setLoading(false);
-  }
-}, []);
+  }, []);
 
   const search = useCallback(() => runSearch({ from: from.code, to: to.code, departDate, returnDate, tripType, sort }), [departDate, from.code, returnDate, runSearch, sort, to.code, tripType]);
   useEffect(() => { void search(); }, [search]);
