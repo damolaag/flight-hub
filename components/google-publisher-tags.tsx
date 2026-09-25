@@ -14,7 +14,21 @@ const AD_UNITS = {
       [320, 50],
       [300, 100],
       [300, 50],
-      [300, 250],
+      [336, 280],
+      "fluid",
+    ] as GptSize[],
+  },
+  beforeFooter: {
+    path: "/23043164651/flighthub_banner1",
+    divId: "div-gpt-ad-flighthub-before-footer-0",
+    sizes: [
+      [960, 90],
+      [970, 90],
+      [728, 90],
+      [320, 100],
+      [320, 50],
+      [300, 100],
+      [300, 50],
       [336, 280],
       "fluid",
     ] as GptSize[],
@@ -46,8 +60,11 @@ function initializeGooglePublisherTags() {
     const leaderboardMapping = googletag
       .sizeMapping()
       .addSize([1024, 0], [[970, 90], [960, 90], [728, 90], "fluid"])
-      .addSize([768, 0], [[728, 90], [300, 250], "fluid"])
-      .addSize([0, 0], [[336, 280], [320, 100], [320, 50], [300, 250], [300, 100], [300, 50], "fluid"])
+      .addSize([768, 0], [[728, 90], [336, 280], [320, 100], "fluid"])
+      .addSize(
+        [0, 0],
+        [[336, 280], [320, 100], [320, 50], [300, 100], [300, 50], "fluid"],
+      )
       .build();
 
     const railMapping = googletag
@@ -58,6 +75,7 @@ function initializeGooglePublisherTags() {
 
     const slots = [
       { ...AD_UNITS.leaderboard, mapping: leaderboardMapping },
+      { ...AD_UNITS.beforeFooter, mapping: leaderboardMapping },
       { ...AD_UNITS.leftRail, mapping: railMapping },
       { ...AD_UNITS.rightRail, mapping: railMapping },
     ];
