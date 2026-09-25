@@ -28,12 +28,11 @@ function formatMoney(usd: number, region: Region) {
   return new Intl.NumberFormat(market.locale, { style: "currency", currency: market.currency, maximumFractionDigits: 0 }).format(usd * market.rate);
 }
 
-function AdSlot({ format, className = "" }: { format: string; className?: string }) {
+function AdSlot({ id, format, className = "" }: { id: string; format: string; className?: string }) {
   return (
     <aside className={`ad-slot ${className}`} aria-label={`Advertisement space ${format}`}>
       <span>Advertisement</span>
-      <strong>{format}</strong>
-      <small>Reserved ad space</small>
+      <div id={id} className="gpt-ad" />
     </aside>
   );
 }
@@ -228,10 +227,10 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="top-ad-wrap"><AdSlot format="728 × 90" className="ad-leaderboard" /></div>
+      <div className="top-ad-wrap"><AdSlot id="div-gpt-ad-1790265245157-0" format="responsive banner" className="ad-leaderboard" /></div>
 
       <div className="monetized-layout">
-        <AdSlot format="160 × 600" className="ad-rail ad-rail-left" />
+        <AdSlot id="div-gpt-ad-1790266549623-0" format="160 × 600" className="ad-rail ad-rail-left" />
       <section className="results-section" id="results">
         {!loading && !error && cheapPicks.length > 0 && <section className="cheap-suggestions" aria-labelledby="cheap-heading"><div className="suggestion-heading"><div><span>Smart fare picks</span><h2 id="cheap-heading">Cheapest flights for your search</h2></div><p>Prices include {travellerCount} {travellerCount === 1 ? "traveller" : "travellers"}</p></div><div className="suggestion-grid">{cheapPicks.map((flight, index) => <a key={flight.id} href={flight.providerUrl} target="_blank" rel="noopener noreferrer sponsored"><span>{index === 0 ? "Cheapest" : index === 1 ? "Next cheapest" : "Another low fare"}</span><strong>{formatMoney(flight.price * partyFactor, region)}</strong><small>{flight.outbound.airline} · {formatTime(flight.outbound.departure)}</small><b>View deal <ArrowRight /></b></a>)}</div></section>}
         <div className="results-heading"><div><p>{from.city} <ArrowRight /> {to.city}</p><h2>{loading ? "Searching the skies…" : `${filtered.length} flight options`}</h2></div><div className="results-actions"><button className="mobile-filter" type="button" onClick={() => setShowFilters((current) => !current)}><Filter /> Filters</button><label>Sort by<Select value={sort} onValueChange={(value) => setSort(value as Sort)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="price">Cheapest first</SelectItem><SelectItem value="duration">Shortest duration</SelectItem><SelectItem value="departure">Departure time</SelectItem></SelectContent></Select></label></div></div>
@@ -245,7 +244,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-        <AdSlot format="160 × 600" className="ad-rail ad-rail-right" />
+        <AdSlot id="div-gpt-ad-1790265962301-0" format="160 × 600" className="ad-rail ad-rail-right" />
       </div>
       <footer id="support"><span><Plane /> flighthub</span><p>Compare available fares on FlightHub, then complete your booking securely with the airline or travel provider.</p><a href="#top">Back to top</a></footer>
     </main>
