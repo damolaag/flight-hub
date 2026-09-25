@@ -51,4 +51,5 @@ GET /api/flights?from=JFK&to=LHR&departDate=2026-10-12&returnDate=2026-10-20&tri
 - Base prices are mock USD fares converted for the selected market, not live bookable fares.
 - Times are rendered in UTC for consistency in this demonstration.
 - Traveller counts and cabin class update the displayed party total; booking and payment remain outside FlightHub.
+- FlightHub does not collect or store profile or account data in this version.
 - The generated inventory layer is isolated behind the API route so it can later be replaced with a live flight provider.
